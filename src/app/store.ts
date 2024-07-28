@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from '@/features/auth/auth-slice'
+import workTableReducer from "@/features/worktable/work-table-slice";
+import authReducer from "@/features/auth/auth-slice";
+import groupReducer from "@/features/group/group-slice";
 
 export const store = configureStore({
   reducer: {
+    worktable: workTableReducer,
     auth: authReducer,
+    group: groupReducer,
   },
 });
 

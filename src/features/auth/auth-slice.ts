@@ -43,7 +43,7 @@ const authSlice = createSlice({
       (state.loading = false), (state.user = action.payload);
     },
     logout: (state) => {
-      (state.loading = false), (state.error = null), actionToken.setToken("token", '');
+      (state.loading = false), (state.error = null), actionToken.setToken("token", ''), (state.user = null);
     },
     authStart: (state) => {
       (state.loading = true), (state.error = null);

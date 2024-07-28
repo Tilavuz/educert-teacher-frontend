@@ -12,7 +12,6 @@ export default function Login() {
   const phoneRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-
   const { user, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
@@ -22,8 +21,8 @@ export default function Login() {
   const { setToken, getToken } = actionToken;
 
   useEffect(() => {
-    const token = getToken('token')
-    if(token) {
+    const token = getToken("token");
+    if (token) {
       dispatch(getUser());
     }
   }, [dispatch]);
@@ -38,7 +37,6 @@ export default function Login() {
     }
   }, [user?.auth]);
 
-
   const login = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -51,6 +49,7 @@ export default function Login() {
       if (res.data.token) {
         setToken("token", res.data.token);
         dispatch(auth(res.data.auth));
+        navigate("/");
         return;
       }
       toast.error(res.data.message);
