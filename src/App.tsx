@@ -4,6 +4,7 @@ import Login from "@/pages/auth/login";
 import PrivateRoute from "@/private/private-route";
 import Profile from "@/pages/profile";
 import Groups from "@/pages/groups";
+import TaskGroup from "./pages/task-group";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -29,6 +30,14 @@ export default function App() {
           element: (
             <PrivateRoute roles={["teacher"]}>
               <Groups />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/groups/:id",
+          element: (
+            <PrivateRoute roles={["teacher"]}>
+              <TaskGroup />
             </PrivateRoute>
           ),
         },

@@ -1,8 +1,11 @@
 import { apiClient } from "@/api/api-client";
 import { RootState } from "@/app/store";
 import { getGroups } from "@/features/group/group-slice";
+import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { Eye } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function Groups() {
@@ -39,6 +42,8 @@ export default function Groups() {
             <th className="uppercase text-[#A6B3C4] text-xs text-left py-3">
               Filial
             </th>
+            <th className="uppercase text-[#A6B3C4] text-xs text-left py-3">
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +55,11 @@ export default function Groups() {
                   <td className="py-2 font-bold">{group?.teacher?.name}</td>
                   <td className="py-2 font-bold">{group?.subject?.title}</td>
                   <td className="py-2 font-bold">{group?.filial?.title}</td>
+                  <td className="py-2 font-bold">
+                    <Link to={`${group._id}`}>
+                      <Eye className="size-6" />
+                    </Link>
+                  </td>
                 </tr>
               );
             })
