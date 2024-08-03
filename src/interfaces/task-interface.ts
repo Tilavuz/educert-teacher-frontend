@@ -1,9 +1,10 @@
 import { GroupInterface } from "./group-interface";
+import { ThemeInterface } from "./theme-interface";
 
 export interface TaskInterface {
   _id: string;
   group: GroupInterface;
   teacherId: string;
-  title: string;
+  themeId: ThemeInterface;
   file: string;
 }

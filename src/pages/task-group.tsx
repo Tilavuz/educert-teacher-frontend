@@ -1,72 +1,44 @@
-import { apiClient } from "@/api/api-client";
-import { RootState } from "@/app/store";
+import TaskBody from "@/components/task/task-body";
+import TaskForm from "@/components/task/task-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { getGroupTasks } from "@/features/group-task/group-task-slice";
-import { serverUrl } from "@/helpers/shared";
-import { FormEvent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus } from "lucide-react";
 
 export default function TaskGroup() {
-  const { id } = useParams();
-  const titleRef = useRef<HTMLInputElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch();
-  const { groupTasks } = useSelector((state: RootState) => state.tasks);
-
-  useEffect(() => {
-    (async function () {
-      try {
-        if ((groupTasks && groupTasks[0]._id !== id) || !groupTasks) {
-          const res = await apiClient.get(`/group/tasks/${id}`);
-          dispatch(getGroupTasks(res.data));
-        }
-      } catch (error) {
-        const result = error as Error;
-        toast.error(result.message);
-      }
-    })();
-  }, []);
-
-  const createTask = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      const taskData = {
-        title: titleRef?.current?.value,
-        file: fileRef?.current?.files ? fileRef?.current?.files[0] : null,
-      };
-
-      const res = await apiClient.post(
-        `/teacher-tasks/create/${id}`,
-        taskData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log(res.data);
-    } catch (error) {
-      const result = error as Error;
-      toast.error(result.message);
-    }
-  };
-
   return (
-    <div className="container">
-      <form onSubmit={(e) => createTask(e)} className="flex flex-col gap-2 mb-4">
-        <Input placeholder="Mavzu qo'shing!" ref={titleRef} type="text" />
-        <Input ref={fileRef} type="file" />
-        <Button>Yuborish</Button>
-      </form>
+    <div className="container py-8">
+      <div className="mb-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="flex items-center justify-center gap-1 bg-[#4fd1c5] rounded-none hover:bg-green-400">
+              <Plus size={18} />
+              <span>Qo'shish</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle></DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <TaskForm />
+          </DialogContent>
+        </Dialog>
+      </div>
       <table className="w-full">
         <thead>
           <tr className="">
             <th className="uppercase text-[#A6B3C4] text-xs text-left py-3">
-              Title
+              Department
+            </th>
+            <th className="uppercase text-[#A6B3C4] text-xs text-left py-3">
+              Theme
             </th>
             <th className="uppercase text-[#A6B3C4] text-xs text-left py-3">
               Group
@@ -75,35 +47,12 @@ export default function TaskGroup() {
               Subject
             </th>
             <th className="uppercase text-[#A6B3C4] text-xs text-left py-3">
-              File
+              Task
             </th>
             <th className="uppercase text-[#A6B3C4] text-xs text-left py-3"></th>
           </tr>
         </thead>
-        <tbody>
-          {groupTasks !== null && groupTasks[0] ? (
-            groupTasks.map((task) => {
-              return (
-                <tr key={task?._id} className="border-t border-t-[#a6b3c4]">
-                  <td className="py-2 font-bold">{task?.title}</td>
-                  <td className="py-2 font-bold">{task?.group.title}</td>
-                  <td className="py-2 font-bold">
-                    {task?.group?.subject?.title}
-                  </td>
-                  <td className="py-2 font-bold">
-                    <Link to={`${serverUrl}/uploads/${task?.file}`} download>
-                      Download
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td className="font-bold">Malumot mavjut emas</td>
-            </tr>
-          )}
-        </tbody>
+        <TaskBody />
       </table>
     </div>
   );
